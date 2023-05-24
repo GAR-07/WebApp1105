@@ -1,0 +1,31 @@
+<div class="container my-5">
+    <h3>Войти в аккаунт</h3>
+    <p>(Александр | 1234), (Олег | 1234)</p>
+    <div class="row">
+        <div class="col-6">
+            <section>
+                <form #form="ngForm" (ngSubmit)="onSubmit()">
+                    <div class="mb-3">
+                        <label for="UserName" class="form-label"></label>
+                        <input type="text" id="UserName" class="form-control"
+                        name ="UserName" [(ngModel)]="accountLoginRequest.userName" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="Password" class="form-label"></label>
+                        <input type="text" id="Password" class="form-control"
+                        name ="Password" [(ngModel)]="accountLoginRequest.password" />
+                    </div>
+                    <div>
+                        <input for="TypeAuth" checked="checked" id="TypeAuth" type="radio" value="Cookie"
+                        name ="TypeAuth" [(ngModel)]="accountLoginRequest.typeAuth" />
+                        <span> Cookie </span> <br />
+                        <input for="TypeAuth" type="radio" id="TypeAuth" value="Bearer"
+                        name ="TypeAuth" [(ngModel)]="accountLoginRequest.typeAuth" />
+                        <span> Bearer </span>
+                    </div>
+                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Войти</button>
+                </form>
+            </section>
+        </div>
+    </div>
+</div>
