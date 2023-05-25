@@ -47,7 +47,10 @@ namespace WebApp1105.API.Controllers
             if (ModelState.IsValid)
             {
                 var user = Accounts.FirstOrDefault(p => p.UserName == model.UserName && p.Password == model.Password);
-                if (user is null) return Unauthorized();
+                if (user is null)
+                {
+                    return Unauthorized();
+                }
 
                 if (model.TypeAuth == "Cookie")
                 {
