@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 })
 
 export class AuthService {
-  isLoggedIn = false;
+  isLoggedIn = true;
   baseApiUrl: string = environment.baseApiUrl;
 
   constructor(
@@ -30,8 +30,6 @@ export class AuthService {
     this.http.get<Account>(this.baseApiUrl + '/Account/Logout');
     localStorage.clear();
     sessionStorage.clear();
-    this.isLoggedIn = false;
-    console.log('isLoggedIn == false, ', this.isLoggedIn);
     console.log('Произведён выход из аккаунта');
     this.router.navigate(['login']);
   }

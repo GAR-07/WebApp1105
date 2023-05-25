@@ -29,8 +29,7 @@ export class LoginComponent {
       {
         localStorage.setItem('access_token', response.access_token);
       }
-      this.authService.isLoggedIn = true;
-      console.log('authService.isLoggedIn == true, ', this.authService.isLoggedIn);
+      localStorage.setItem('isLoggedIn', '+')
       this.router.navigate(['cabinet']);
     },
       error: (response) => {
