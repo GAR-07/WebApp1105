@@ -2,15 +2,18 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CabinetComponent } from './cabinet/cabinet.component';
 import { LoginComponent } from './login/login.component';
+import { cabinetGuard } from './cabinet/cabinet.guard';
 
 const routes: Routes = [
   {
     path: '',
-    component: CabinetComponent
+    component: CabinetComponent,
+    canActivate: [cabinetGuard],
   },
   {
     path: 'cabinet',
-    component: CabinetComponent
+    component: CabinetComponent,
+    canActivate: [cabinetGuard],
   },
   {
     path: 'login',

@@ -10,35 +10,31 @@ import { Router } from '@angular/router';
 })
 
 export class AuthService {
-
+  isLoggedIn = false;
   baseApiUrl: string = environment.baseApiUrl;
 
-  constructor(    
+  constructor(
     private http: HttpClient,
     private router: Router,
     ) { }
 
   login(accountLoginRequest : LoginAccount) {
     return this.http.post(this.baseApiUrl + '/Account/Login', accountLoginRequest,)
-    }
-
-  logout() {
-    this.http.get<Account>(this.baseApiUrl + '/Account/Logout')
-    .subscribe({
-      next: (response: any) => {
-        console.log(response);
-      },
-      error: (response) => {
-        console.log(response);
-      }
-    });
-    localStorage.clear();
-    sessionStorage.clear();
-    console.log('Произведён выход из аккаунта');
-    this.router.navigate(['login'])
-    }
+  }
 
   cabinet(headers : HttpHeaders) {
-    return this.http.get<Account>(this.baseApiUrl + '/Account/Cabinet', { headers: headers })
+    return this.http.get<Account>(this.baseApiUrl + '/Account/Cabinet', { headers: headers });
   }
+
+  logout() {
+    this.http.get<Account>(this.baseApiUrl + '/Account/Logout');
+    localStorage.clear();
+    sessionStorage.clear();
+    this.isLoggedIn = false;
+    console.log('isLoggedIn == false, ', this.isLoggedIn);
+    console.log('Произведён выход из аккаунта');
+    this.router.navigate(['login']);
+  }
+
+
 }
