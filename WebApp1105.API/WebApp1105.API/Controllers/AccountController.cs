@@ -7,6 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using WebApp1105.API.Models;
+using WebApp1105.API.Data.Models;
+using WebApp1105.Models;
+using WebApp1105.Data.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata.Ecma335;
+using BCrypt.Net;
 
 namespace WebApp1105.API.Controllers
 {
@@ -14,31 +20,31 @@ namespace WebApp1105.API.Controllers
     [Route("[controller]")]
     public class AccountController : Controller
     {
+        private readonly ApplicationDbContext _dbContext;
         private readonly AuthOptions _authOptions;
+        private readonly IAllAccounts _allAccounts;
         private const string AuthSchemes =
             CookieAuthenticationDefaults.AuthenticationScheme +
             "," + JwtBearerDefaults.AuthenticationScheme;
 
-        public AccountController(IConfiguration configuration)
+        public AccountController(
+            IConfiguration configuration,
+            IAllAccounts allAccounts,
+            ApplicationDbContext dbContext)
         {
             _authOptions = configuration.GetSection("AuthOptions").Get<AuthOptions>();
+            _allAccounts = allAccounts;
+            _dbContext = dbContext;
         }
 
-        public List<Account> Accounts => new List<Account>
-        {
-            new Account
-            {
-                UserId = Guid.Parse("F9168C5E-CEB2-4faa-B6BF-329BF39FA1E4"),
-                UserName = "Александр",
-                Password = "1234"
-            },
-            new Account
-            {
-                UserId = Guid.Parse("F1234D5E-CEB2-4faa-B6BF-329BF39FA1E4"),
-                UserName = "Олег",
-                Password = "1234"
-            }
-        };
+        //account = new()
+        //{
+        //    UserName = model.UserName,
+        //    PasswordHash = passwordHash,
+        //    Email = "NULL"
+        //};
+        //_dbContext.Account.Add(account);
+        //await _dbContext.SaveChangesAsync();
 
         [Route("Login")]
         [HttpPost]
@@ -46,34 +52,37 @@ namespace WebApp1105.API.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = Accounts.FirstOrDefault(p => p.UserName == model.UserName && p.Password == model.Password);
-                if (user is null)
+                var passwordHash = BCrypt.Net.BCrypt.EnhancedHashPassword(model.Password, HashType.SHA512);
+                Account? account = await _dbContext.Account.FirstOrDefaultAsync
+                    (p => p.UserName == model.UserName);
+                var result = BCrypt.Net.BCrypt.EnhancedVerify(model.Password, account.PasswordHash, HashType.SHA512);
+                if (!result)
                 {
                     return Unauthorized();
                 }
 
                 if (model.TypeAuth == "Cookie")
                 {
-                    var claims = new List<Claim> { new Claim(ClaimsIdentity.DefaultNameClaimType, user.UserName) };
+                    var claims = new List<Claim> { new Claim(ClaimsIdentity.DefaultNameClaimType, account.UserName) };
                     ClaimsIdentity claimsIdentity =
                         new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType,
                         ClaimsIdentity.DefaultRoleClaimType);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                         new ClaimsPrincipal(claimsIdentity));
-                    var response = new { username = user.UserName };
+                    var response = new { username = account.UserName };
                     return Ok(response);
                 }
-                else if (model.TypeAuth == "Bearer")
+                if (model.TypeAuth == "Bearer")
                 {
                     var claims = new List<Claim>()
                     {
-                        new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
-                        new Claim(JwtRegisteredClaimNames.Name, user.UserName),
+                        new Claim(JwtRegisteredClaimNames.Sub, account.UserId.ToString()),
+                        new Claim(JwtRegisteredClaimNames.Name, account.UserName),
                     };
                     var response = new
                     {
                         access_token = GenerateJwt(claims),
-                        username = user.UserName
+                        username = account.UserName
                     };
                     return Json(response);
                 }
@@ -89,7 +98,7 @@ namespace WebApp1105.API.Controllers
             try
             {
                 Guid UserId = Guid.Parse(User.Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value);
-                var response = new { username = Accounts.FirstOrDefault(p => p.UserId == UserId).UserName };
+                var response = new { username = _dbContext.Account.FirstOrDefault(p => p.UserId == UserId).UserName };
                 return Json(response);
             }
             catch

@@ -86,3 +86,9 @@ C:\Users\Александр\source\repos\WebApp1105\WebApp1105.API\WebApp1105.AP
 C:\Users\Александр\source\repos\WebApp1105\WebApp1105.API\WebApp1105.API\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\Александр\source\repos\WebApp1105\WebApp1105.API\WebApp1105.API\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 C:\Users\Александр\source\repos\WebApp1105\WebApp1105.API\WebApp1105.API\obj\Debug\net6.0\WebApp1105.API.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Александр\source\repos\WebApp1105\WebApp1105.API\WebApp1105.API\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\Александр\source\repos\WebApp1105\WebApp1105.API\WebApp1105.API\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\Александр\source\repos\WebApp1105\WebApp1105.API\WebApp1105.API\bin\Debug\net6.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\Александр\source\repos\WebApp1105\WebApp1105.API\WebApp1105.API\bin\Debug\net6.0\Microsoft.Extensions.Identity.Core.dll
+C:\Users\Александр\source\repos\WebApp1105\WebApp1105.API\WebApp1105.API\bin\Debug\net6.0\Microsoft.Extensions.Identity.Stores.dll
+C:\Users\Александр\source\repos\WebApp1105\WebApp1105.API\WebApp1105.API\bin\Debug\net6.0\BCrypt.Net-Next.dll

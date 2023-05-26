@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginAccount } from 'src/models/loginAccount.model';
 import { AuthService } from 'src/app/_services/auth.service';
+import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-login',
@@ -11,12 +12,13 @@ import { AuthService } from 'src/app/_services/auth.service';
 export class LoginComponent {
 
   accountLoginRequest: LoginAccount = {
-    userName: 'Александр',
-    password: '1234',
-    typeAuth: 'Cookie'
+    userName: '',
+    password: '',
+    typeAuth: 'Bearer'
   }
   constructor(
-    private authService: AuthService, 
+    private authService: AuthService,
+    private appComponent: AppComponent,
     private router: Router
     ) { }
 
@@ -30,6 +32,7 @@ export class LoginComponent {
         localStorage.setItem('access_token', response.access_token);
       }
       localStorage.setItem('isLoggedIn', '+')
+      this.appComponent.isLoggedIn = true;
       this.router.navigate(['cabinet']);
     },
       error: (response) => {

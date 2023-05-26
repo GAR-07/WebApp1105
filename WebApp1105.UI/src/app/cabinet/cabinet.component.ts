@@ -31,7 +31,7 @@ export class CabinetComponent {
       next: (response: any) => {
         //console.log(response);
         const userName = response.username;
-        if (userName != 'Гость')
+        if (userName)
           this.user.userName = userName;
       },
       error: (response) => {

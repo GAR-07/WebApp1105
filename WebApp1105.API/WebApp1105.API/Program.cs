@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using WebApp1105.API.Models;
+using WebApp1105.Data.Interfaces;
+using WebApp1105.Data.Repository;
+using WebApp1105.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +11,10 @@ var authOptions = builder.Configuration.GetSection("AuthOptions").Get<AuthOption
 
 // Add services to the container.
 builder.Services.AddControllers();
-
+builder.Services.AddTransient<IAllAccounts, AccountRepository>();
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+);
 builder.Services.AddAuthentication()
     .AddCookie(options =>
     {

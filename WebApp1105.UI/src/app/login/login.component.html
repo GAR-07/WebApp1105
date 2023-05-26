@@ -16,6 +16,7 @@
                         name ="Password" [(ngModel)]="accountLoginRequest.password" />
                     </div>
                     <div>
+                        <p>Выберите тип аутентификации:</p>
                         <input for="TypeAuth" checked="checked" id="TypeAuth" type="radio" value="Cookie"
                         name ="TypeAuth" [(ngModel)]="accountLoginRequest.typeAuth" />
                         <span> Cookie </span> <br />
@@ -23,7 +24,9 @@
                         name ="TypeAuth" [(ngModel)]="accountLoginRequest.typeAuth" />
                         <span> Bearer </span>
                     </div>
-                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Войти</button>
+                    <div>
+                        <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Войти</button>
+                    </div>
                 </form>
             </section>
         </div>

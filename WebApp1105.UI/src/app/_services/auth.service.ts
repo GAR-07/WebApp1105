@@ -26,13 +26,7 @@ export class AuthService {
     return this.http.get<Account>(this.baseApiUrl + '/Account/Cabinet', { headers: headers });
   }
 
-  logout() {
-    this.http.get<Account>(this.baseApiUrl + '/Account/Logout');
-    localStorage.clear();
-    sessionStorage.clear();
-    console.log('Произведён выход из аккаунта');
-    this.router.navigate(['login']);
+  logout(headers : HttpHeaders) {
+    return this.http.get<Account>(this.baseApiUrl + '/Account/Logout', { headers: headers });
   }
-
-
 }
