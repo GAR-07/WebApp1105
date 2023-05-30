@@ -14,7 +14,7 @@ export class LoginComponent {
   accountLoginRequest: LoginAccount = {
     userName: '',
     password: '',
-    typeAuth: 'Bearer'
+    typeAuth: 'Cookie'
   }
   constructor(
     private authService: AuthService,

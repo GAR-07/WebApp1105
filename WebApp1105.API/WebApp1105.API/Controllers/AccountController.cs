@@ -37,15 +37,6 @@ namespace WebApp1105.API.Controllers
             _dbContext = dbContext;
         }
 
-        //account = new()
-        //{
-        //    UserName = model.UserName,
-        //    PasswordHash = passwordHash,
-        //    Email = "NULL"
-        //};
-        //_dbContext.Account.Add(account);
-        //await _dbContext.SaveChangesAsync();
-
         [Route("Login")]
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
@@ -53,12 +44,22 @@ namespace WebApp1105.API.Controllers
             if (ModelState.IsValid)
             {
                 var passwordHash = BCrypt.Net.BCrypt.EnhancedHashPassword(model.Password, HashType.SHA512);
-                Account? account = await _dbContext.Account.FirstOrDefaultAsync
-                    (p => p.UserName == model.UserName);
-                var result = BCrypt.Net.BCrypt.EnhancedVerify(model.Password, account.PasswordHash, HashType.SHA512);
-                if (!result)
+                Account? account = await _dbContext.Account.FirstOrDefaultAsync(p => p.UserName == model.UserName);
+                if (account != null)
                 {
-                    return Unauthorized();
+                    if (!BCrypt.Net.BCrypt.EnhancedVerify(model.Password, account.PasswordHash, HashType.SHA512))
+                        return Unauthorized();
+                }
+                else
+                {
+                    account = new()
+                    {
+                        UserName = model.UserName,
+                        PasswordHash = passwordHash,
+                        Email = "NULL"
+                    };
+                    _dbContext.Account.Add(account);
+                    await _dbContext.SaveChangesAsync();
                 }
 
                 if (model.TypeAuth == "Cookie")

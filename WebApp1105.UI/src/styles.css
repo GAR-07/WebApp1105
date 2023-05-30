@@ -1,1 +1,30 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+}
+body
+{
+    font-family: "Comfortaa", "Arial", sans-serif;
+}
+.navbar
+{
+    background-image: linear-gradient(to right, #0d6efd, #890dfd);
+}
+.navbar-brand
+{
+    padding-left: 20px;
+}
+.navbar-nav li a
+{
+    color: #fff !important;
+    text-align: right;
+}
+.fa-bars
+{
+    color: #fff;
+}
+.navbar-toggler
+{
+    outline: none !important;
+}

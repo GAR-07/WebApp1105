@@ -19,7 +19,28 @@ constructor(
 
   ngOnInit(): void {
     if (localStorage.getItem('isLoggedIn') == '+')
-      this.isLoggedIn = true
+    {
+      // const accessToken = localStorage.getItem('access_token');
+      // if (accessToken)
+      //   var headers = new HttpHeaders().set('Authorization', 'Bearer ' + accessToken);
+      // else
+      //   var headers = new HttpHeaders().set('Access-Control-Allow-Credentials', 'true');
+
+      // this.authService.cabinet(headers)
+      // .subscribe({
+      //   next: (response: any) => {
+      //     const userName = response.username;
+      //     if (userName)
+            this.isLoggedIn = true
+      //     else
+      //       this.isLoggedIn = false
+      //   },
+      //   error: (response) => {
+      //     console.log(response);
+      //     this.router.navigate(['login']);
+      //   }
+      // });
+    }
   }
 
   logout(): void {
@@ -29,13 +50,13 @@ constructor(
       var headers = new HttpHeaders().set('Authorization', 'Bearer ' + accessToken);
     else
       var headers = new HttpHeaders().set('Access-Control-Allow-Credentials', 'true');
-    this.authService.logout(headers).subscribe({
+    
+      this.authService.logout(headers).subscribe({
       next: res => {
         console.log(res);
         localStorage.clear();
         sessionStorage.clear();
         this.router.navigate(['login']);
-        console.log('Произведён выход из аккаунта');
       },
       error: err => {
         console.log(err);
