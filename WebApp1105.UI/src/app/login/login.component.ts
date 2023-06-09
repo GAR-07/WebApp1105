@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoginAccount } from 'src/models/loginAccount.model';
+import { LoginAccount } from 'src/app/_interfaces/loginAccount.model';
 import { AuthService } from 'src/app/_services/auth.service';
 import { AppComponent } from '../app.component';
 
@@ -26,10 +26,10 @@ export class LoginComponent {
     this.authService.login(this.accountLoginRequest)
     .subscribe({
       next: (response: any) => {
-      console.log(response);
-      if (response.access_token)
+      // console.log(response);
+      if (response.accessToken)
       {
-        localStorage.setItem('access_token', response.access_token);
+        localStorage.setItem('accessToken', response.accessToken);
       }
       localStorage.setItem('isLoggedIn', '+')
       this.appComponent.isLoggedIn = true;
@@ -37,6 +37,7 @@ export class LoginComponent {
     },
       error: (response) => {
         console.log(response);
+        console.log(response.error.errorMessage);
       }
     });
   }

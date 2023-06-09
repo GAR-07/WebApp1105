@@ -1,6 +1,6 @@
 import { CanActivateFn } from '@angular/router';
 
-export const cabinetGuard: CanActivateFn = () => {
+export const CabinetGuard: CanActivateFn = () => {
     if (localStorage.getItem('isLoggedIn'))
         return true
     else

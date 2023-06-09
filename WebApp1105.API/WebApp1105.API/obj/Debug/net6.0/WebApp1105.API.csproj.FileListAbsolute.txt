@@ -53,9 +53,6 @@ C:\Users\Александр\source\repos\WebApp1105\WebApp1105.API\WebApp1105.AP
 C:\Users\Александр\source\repos\WebApp1105\WebApp1105.API\WebApp1105.API\bin\Debug\net6.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
 C:\Users\Александр\source\repos\WebApp1105\WebApp1105.API\WebApp1105.API\bin\Debug\net6.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
 C:\Users\Александр\source\repos\WebApp1105\WebApp1105.API\WebApp1105.API\bin\Debug\net6.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
-C:\Users\Александр\source\repos\WebApp1105\WebApp1105.API\WebApp1105.API\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll
-C:\Users\Александр\source\repos\WebApp1105\WebApp1105.API\WebApp1105.API\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
-C:\Users\Александр\source\repos\WebApp1105\WebApp1105.API\WebApp1105.API\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll
 C:\Users\Александр\source\repos\WebApp1105\WebApp1105.API\WebApp1105.API\bin\Debug\net6.0\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
 C:\Users\Александр\source\repos\WebApp1105\WebApp1105.API\WebApp1105.API\bin\Debug\net6.0\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\Александр\source\repos\WebApp1105\WebApp1105.API\WebApp1105.API\bin\Debug\net6.0\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll
@@ -92,3 +89,6 @@ C:\Users\Александр\source\repos\WebApp1105\WebApp1105.API\WebApp1105.AP
 C:\Users\Александр\source\repos\WebApp1105\WebApp1105.API\WebApp1105.API\bin\Debug\net6.0\Microsoft.Extensions.Identity.Core.dll
 C:\Users\Александр\source\repos\WebApp1105\WebApp1105.API\WebApp1105.API\bin\Debug\net6.0\Microsoft.Extensions.Identity.Stores.dll
 C:\Users\Александр\source\repos\WebApp1105\WebApp1105.API\WebApp1105.API\bin\Debug\net6.0\BCrypt.Net-Next.dll
+C:\Users\Александр\source\repos\WebApp1105\WebApp1105.API\WebApp1105.API\bin\Debug\net6.0\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\Александр\source\repos\WebApp1105\WebApp1105.API\WebApp1105.API\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
+C:\Users\Александр\source\repos\WebApp1105\WebApp1105.API\WebApp1105.API\bin\Debug\net6.0\runtimes\unix\lib\net6.0\System.Drawing.Common.dll

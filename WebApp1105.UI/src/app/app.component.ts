@@ -20,7 +20,7 @@ constructor(
   ngOnInit(): void {
     if (localStorage.getItem('isLoggedIn') == '+')
     {
-      // const accessToken = localStorage.getItem('access_token');
+      // const accessToken = localStorage.getItem('accessToken');
       // if (accessToken)
       //   var headers = new HttpHeaders().set('Authorization', 'Bearer ' + accessToken);
       // else
@@ -29,7 +29,7 @@ constructor(
       // this.authService.cabinet(headers)
       // .subscribe({
       //   next: (response: any) => {
-      //     const userName = response.username;
+      //     const userName = response.userName;
       //     if (userName)
             this.isLoggedIn = true
       //     else
@@ -45,22 +45,14 @@ constructor(
 
   logout(): void {
     this.isLoggedIn = false;
-    const accessToken = localStorage.getItem('access_token');
-    if (accessToken)
-      var headers = new HttpHeaders().set('Authorization', 'Bearer ' + accessToken);
-    else
-      var headers = new HttpHeaders().set('Access-Control-Allow-Credentials', 'true');
-    
-      this.authService.logout(headers).subscribe({
-      next: res => {
-        console.log(res);
+      this.authService.logout().subscribe({
+      next: response => {
+        // console.log(res);
         localStorage.clear();
         sessionStorage.clear();
         this.router.navigate(['login']);
       },
-      error: err => {
-        console.log(err);
-      }
+      error: response => console.log(response)
     });
   }
 }

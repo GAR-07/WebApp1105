@@ -1,3 +1,42 @@
-<div class="container my-5">
-    <h3 *ngIf="user">Добро пожаловать, {{ user.userName }}</h3>
-</div>
+<article class="container my-5">
+    <h3 *ngIf="user">Добро пожаловать, {{ user.userName }}!</h3>
+    <p>Какие изображения загрузим сегодня?</p>
+  <section class="uploadFile" *ngIf="user.userName">
+    <div class="row">
+        <div class="col-lg-6">
+            <form>
+                <div class="mb-3">
+                    <label for="title">Название</label>
+                    <input type="text" class="form-control" id="title" name="title" 
+                        placeholder="Введите название изображения" [(ngModel)]="title">
+                </div>
+                <div class="mb-3">
+                    <label for="description">Описание</label>
+                    <input type="text" class="form-control" id="description" name="description" 
+                        placeholder="Введите описание изображения" [(ngModel)]="description">
+                </div>
+                <div class="row" style="margin-bottom:15px;">
+                    <div class="col-lg-6">
+                        <input type="file" accept=".png, .jpg, .bmp" #file placeholder="Выбрать файл" 
+                            (change)="uploadFile(file.files)" style="display:none;">
+                    <!-- добавить multiple в imput для включения загрузки сразу нескольких файлов (сейчас не работает) -->
+                        <button type="button" class="btn btn-lg btn-primary" (click)="file.click()">Выбрать файл</button>
+                    </div>
+                    <div class="col-lg-6">
+                        <span class="upload" *ngIf="(progress > 0 && !message)">
+                            {{progress}}%
+                        </span>
+                        <span class="upload" *ngIf="message">
+                            {{message}}
+                        </span>
+                    </div>
+                </div>
+                <button type="button" class="w-100 btn btn-lg btn-primary mb-3" (click)="onCreate()">Сохранить</button>
+            </form>
+        </div>
+        <div class="col" *ngIf="response.dbPath">
+          <img  [src]="createImgPath(response.dbPath)" alt="Загруженное изображение" style="width:300px; height:300px;">
+        </div>
+    </div>
+  </section>
+</article>

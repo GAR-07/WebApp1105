@@ -11,7 +11,6 @@ using WebApp1105.API.Data.Models;
 using WebApp1105.Models;
 using WebApp1105.Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata.Ecma335;
 using BCrypt.Net;
 
 namespace WebApp1105.API.Controllers
@@ -44,11 +43,13 @@ namespace WebApp1105.API.Controllers
             if (ModelState.IsValid)
             {
                 var passwordHash = BCrypt.Net.BCrypt.EnhancedHashPassword(model.Password, HashType.SHA512);
-                Account? account = await _dbContext.Account.FirstOrDefaultAsync(p => p.UserName == model.UserName);
+                Account? account = await _dbContext.Accounts.FirstOrDefaultAsync(p => p.UserName == model.UserName);
                 if (account != null)
                 {
                     if (!BCrypt.Net.BCrypt.EnhancedVerify(model.Password, account.PasswordHash, HashType.SHA512))
-                        return Unauthorized();
+                    {
+                        return BadRequest("Password is not valid");
+                    }
                 }
                 else
                 {
@@ -58,7 +59,7 @@ namespace WebApp1105.API.Controllers
                         PasswordHash = passwordHash,
                         Email = "NULL"
                     };
-                    _dbContext.Account.Add(account);
+                    _dbContext.Accounts.Add(account);
                     await _dbContext.SaveChangesAsync();
                 }
 
@@ -70,7 +71,10 @@ namespace WebApp1105.API.Controllers
                         ClaimsIdentity.DefaultRoleClaimType);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                         new ClaimsPrincipal(claimsIdentity));
-                    var response = new { username = account.UserName };
+                    var response = new 
+                    { 
+                        username = account.UserName 
+                    };
                     return Ok(response);
                 }
                 if (model.TypeAuth == "Bearer")
@@ -82,32 +86,37 @@ namespace WebApp1105.API.Controllers
                     };
                     var response = new
                     {
-                        access_token = GenerateJwt(claims),
-                        username = account.UserName
+                        accessToken = GenerateJwt(claims),
+                        userName = account.UserName
                     };
-                    return Json(response);
+                    return Ok(response);
                 }
             }
-            return Unauthorized();
+            return BadRequest("Invalid model object");
         }
 
         [HttpGet]
         [Authorize(AuthenticationSchemes = AuthSchemes)]
-        [Route("Cabinet")]
-        public IActionResult Cabinet()
+        [Route("AccountConfirm")]
+        public IActionResult AccountConfirm()
         {
             try
             {
                 Guid UserId = Guid.Parse(User.Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value);
-                var response = new { username = _dbContext.Account.FirstOrDefault(p => p.UserId == UserId).UserName };
-                return Json(response);
+                var response = new {
+                    userId = UserId,
+                    userName = _dbContext.Accounts.FirstOrDefault(p => p.UserId == UserId).UserName
+                };
+                return Ok(response);
             }
             catch
             {
                 if (HttpContext.User.Identity.IsAuthenticated)
                 {
-                    string login = HttpContext.User.Identity.Name;
-                    var response = new { username = login };
+                    var response = new { 
+                        userId = _dbContext.Accounts.FirstOrDefault(p => p.UserName == HttpContext.User.Identity.Name).UserId,
+                        userName = HttpContext.User.Identity.Name
+                    };
                     return Ok(response);
                 }
                 else
@@ -115,16 +124,12 @@ namespace WebApp1105.API.Controllers
             }
         }
 
-
         [HttpGet]
         [Authorize(AuthenticationSchemes = AuthSchemes)]
         [Route("Logout")]
         public async Task<IActionResult> Logout()
         {
-            if (HttpContext.User.Identity.IsAuthenticated)
-            {
-                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            }
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return Ok();
         }
 

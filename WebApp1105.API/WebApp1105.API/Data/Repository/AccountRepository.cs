@@ -10,6 +10,6 @@ namespace WebApp1105.Data.Repository
 
 		public AccountRepository(ApplicationDbContext ApplicationDbContext) {this.ApplicationDbContext = ApplicationDbContext; }
 	
-		public IEnumerable<Account> Accounts => ApplicationDbContext.Account;
+		public IEnumerable<Account> Accounts => ApplicationDbContext.Accounts;
 	}
 }

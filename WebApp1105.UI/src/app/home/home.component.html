@@ -1,0 +1,13 @@
+<article class="container-fluid my-3">
+  <div class="row row-cols-auto gy-3">
+    <div class="col" *ngFor="let image of images; let i = index">
+      <!-- <H1> {{images[i].title}} </H1> -->
+      <img  [src]="createImgPath(images[i].imgPath[1])" alt="Загруженное изображение">
+      <!-- <p> {{images[i].description}} </p> -->
+      <p> Открыть в другом разрешении: </p>
+      <a (click)="GoToLink(images[i].imgPath[0])">{{images[i].imgWidth[0]}}x{{images[i].imgHeight[0]}}</a><br>
+      <a (click)="GoToLink(images[i].imgPath[1])">{{images[i].imgWidth[1]}}x{{images[i].imgHeight[1]}}</a><br>
+      <a (click)="GoToLink(images[i].imgPath[2])">{{images[i].imgWidth[2]}}x{{images[i].imgHeight[2]}}</a><br>
+    </div>
+  </div>
+</article>

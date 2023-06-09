@@ -9,6 +9,7 @@ namespace WebApp1105.Models
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         { }
-        public DbSet<Account> Account { get; set; }
+        public DbSet<Account> Accounts { get; set; }
+        public DbSet<Image> Images { get; set; }
     }
 }

@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { CanActivateFn } from '@angular/router';
 
-import { cabinetGuard } from './cabinet.guard';
+import { CabinetGuard } from './cabinet.guard';
 
 describe('cabinetGuard', () => {
   const executeGuard: CanActivateFn = (...guardParameters) => 
-      TestBed.runInInjectionContext(() => cabinetGuard(...guardParameters));
+      TestBed.runInInjectionContext(() => CabinetGuard(...guardParameters));
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
