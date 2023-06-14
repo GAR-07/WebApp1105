@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { AuthService } from './auth.service';
-import { ImageToCreate } from '../_interfaces/imageToCreate.model';
+import { ImageToCreate } from '../_interfaces/FileToCreate.model';
 
 @Injectable({
   providedIn: 'root'
@@ -24,11 +24,16 @@ export class StorageService {
       });
   }
 
-  saveImage(image : ImageToCreate) {
+  saveFile(image : ImageToCreate) {
     var headers = this.authService.headersInit();
-    return this.http.post(this.baseApiUrl + '/Storage/SaveImage', image, { headers: headers});
+    return this.http.post(this.baseApiUrl + '/Storage/SaveFile', image, { headers: headers});
   }
+
   getAllImage() {
     return this.http.post(this.baseApiUrl + '/Storage/GetImage', { });
+  }
+
+  getAllVideo() {
+    return this.http.post(this.baseApiUrl + '/Storage/GetVideo', { });
   }
 }

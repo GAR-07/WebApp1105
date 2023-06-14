@@ -1,6 +1,6 @@
 <article class="container my-5">
     <h3 *ngIf="user">Добро пожаловать, {{ user.userName }}!</h3>
-    <p>Какие изображения загрузим сегодня?</p>
+    <p>Какие изображения или видео загрузим сегодня?</p>
   <section class="uploadFile" *ngIf="user.userName">
     <div class="row">
         <div class="col-lg-6">
@@ -8,25 +8,26 @@
                 <div class="mb-3">
                     <label for="title">Название</label>
                     <input type="text" class="form-control" id="title" name="title" 
-                        placeholder="Введите название изображения" [(ngModel)]="title">
+                        placeholder="Введите название" [(ngModel)]="title">
                 </div>
                 <div class="mb-3">
                     <label for="description">Описание</label>
                     <input type="text" class="form-control" id="description" name="description" 
-                        placeholder="Введите описание изображения" [(ngModel)]="description">
+                        placeholder="Введите описание" [(ngModel)]="description">
                 </div>
                 <div class="row" style="margin-bottom:15px;">
+                    <p>Советуем загружать файлы не более 100MB</p>
                     <div class="col-lg-6">
-                        <input type="file" accept=".png, .jpg, .bmp" #file placeholder="Выбрать файл" 
+                        <input type="file" accept=".png, .jpg, .bmp, .mp4" #file placeholder="Выбрать файл" 
                             (change)="uploadFile(file.files)" style="display:none;">
                     <!-- добавить multiple в imput для включения загрузки сразу нескольких файлов (сейчас не работает) -->
                         <button type="button" class="btn btn-lg btn-primary" (click)="file.click()">Выбрать файл</button>
                     </div>
                     <div class="col-lg-6">
-                        <span class="upload" *ngIf="(progress > 0 && !message)">
+                        <span *ngIf="(progress > 0 && !message)">
                             {{progress}}%
                         </span>
-                        <span class="upload" *ngIf="message">
+                        <span *ngIf="message">
                             {{message}}
                         </span>
                     </div>
@@ -35,7 +36,14 @@
             </form>
         </div>
         <div class="col" *ngIf="response.dbPath">
-          <img  [src]="createImgPath(response.dbPath)" alt="Загруженное изображение" style="width:300px; height:300px;">
+          <img *ngIf="response.contentType[0] == 'image'" [src]="createImgPath(response.dbPath)" style="width:300px; height:300px;">
+          <video *ngIf="response.contentType[0] == 'video'" width="300" height="300" controls="controls">
+            <source [src]="createImgPath(response.dbPath)" type='video/ogg; codecs="theora, vorbis"'>
+            <source [src]="createImgPath(response.dbPath)" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+            <source [src]="createImgPath(response.dbPath)" type='video/webm; codecs="vp8, vorbis"'>
+            Тег video не поддерживается вашим браузером. 
+            <a (click)="goToLink(response.dbPath)">Скачайте видео</a>.
+           </video>
         </div>
     </div>
   </section>

@@ -8,6 +8,8 @@ import { LoginComponent } from './login/login.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HomeComponent } from './home/home.component';
+import { ImagesComponent } from './images/images.component';
+import { VideosComponent } from './videos/videos.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +17,8 @@ import { HomeComponent } from './home/home.component';
     CabinetComponent,
     LoginComponent,
     HomeComponent,
+    ImagesComponent,
+    VideosComponent,
   ],
   imports: [
     BrowserModule,

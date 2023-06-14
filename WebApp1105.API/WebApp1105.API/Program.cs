@@ -19,8 +19,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 );
 builder.Services.Configure<FormOptions>(o =>
 {
-    o.ValueLengthLimit = int.MaxValue;
-    o.MultipartBodyLengthLimit = int.MaxValue;
+    o.ValueLengthLimit = 250000000;
+    o.MultipartBodyLengthLimit = 250000000;
     o.MemoryBufferThreshold = int.MaxValue;
 });
 builder.Services.AddAuthentication()

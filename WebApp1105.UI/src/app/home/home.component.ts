@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { StorageService } from '../_services/storage.service';
-import { Router } from '@angular/router';
 import { Image } from '../_interfaces/image.model';
+import { Video } from '../_interfaces/video.model';
 
 @Component({
   selector: 'app-home',
@@ -11,10 +11,10 @@ import { Image } from '../_interfaces/image.model';
 export class HomeComponent {
 
   images: Image[] = [];
+  videos: Video[] = [];
 
   constructor(
     private storageService: StorageService,
-    private router: Router
     ) { }
 
   ngOnInit(): void {
@@ -31,14 +31,26 @@ export class HomeComponent {
       },
       error: (response) => console.log(response)
     });
-    console.log('hello!', this.images);
+    this.storageService.getAllVideo()
+    .subscribe({
+      next: (response: any) => {
+        if (response)
+        {
+          for (var i = 0; i < response.length; i++)
+          {
+            this.videos[i] = response[i];
+          }
+        }
+      },
+      error: (response) => console.log(response)
+    });
   }
 
-  public createImgPath = (serverPath: string | null) => { 
+  createFilePath = (serverPath: string) => { 
     return `https://localhost:7185/${serverPath}`; 
   }
 
-  GoToLink(serverPath: string){
+  goToLink(serverPath: string){
     window.open(`https://localhost:7185/${serverPath}`, "_blank");
   }
 }

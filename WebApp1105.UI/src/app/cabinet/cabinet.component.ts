@@ -4,7 +4,7 @@ import { AuthService } from 'src/app/_services/auth.service';
 import { Account } from '../_interfaces/account.model';
 import { StorageService } from '../_services/storage.service';
 import { HttpEventType } from '@angular/common/http';
-import { ImageToCreate } from '../_interfaces/imageToCreate.model';
+import { ImageToCreate } from '../_interfaces/FileToCreate.model';
 
 @Component({
   selector: 'app-cabinet',
@@ -19,15 +19,20 @@ export class CabinetComponent {
     userName: null
   };
   image: ImageToCreate = {
-    userId: null,
+    userId: '',
     title: null,
     description: null,
-    imgPath: null
+    fileType: ['', ''],
+    filePath: ''
   };
   title: string = '';
   description: string = '';
-  response = {dbPath: ''};
+  response = {
+    contentType: ['', ''],
+    dbPath: ''
+  };
 
+  contentType: string = '';
   progress: number = 0;
   message: string = '';
 
@@ -79,6 +84,7 @@ export class CabinetComponent {
       },
       error: (response) => console.log(response)
     });
+
   }
 
   onCreate = () => {
@@ -86,10 +92,11 @@ export class CabinetComponent {
       userId: this.user.userId,
       title: this.title,
       description: this.description,
-      imgPath: this.response.dbPath
+      filePath: this.response.dbPath,
+      fileType: this.response.contentType
     }
-
-    this.storageService.saveImage(this.image)
+    this.message = 'Идёт обработка...';
+    this.storageService.saveFile(this.image)
     .subscribe({
       next: (response:any) => {
         console.log(response);
@@ -99,7 +106,11 @@ export class CabinetComponent {
     });
   }
 
-  public createImgPath = (serverPath: string) => { 
+  createImgPath = (serverPath: string) => { 
     return `https://localhost:7185/${serverPath}`; 
+  }
+
+  goToLink(serverPath: string){
+    window.open(`https://localhost:7185/${serverPath}`, "_blank");
   }
 }
