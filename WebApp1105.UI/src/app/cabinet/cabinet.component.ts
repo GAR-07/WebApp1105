@@ -1,10 +1,13 @@
-import { Router } from '@angular/router';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { AuthService } from 'src/app/_services/auth.service';
 import { Account } from '../_interfaces/account.model';
 import { StorageService } from '../_services/storage.service';
-import { HttpEventType } from '@angular/common/http';
-import { ImageToCreate } from '../_interfaces/FileToCreate.model';
+import { environment } from 'src/environments/environment';
+import { Image } from '../_interfaces/image.model';
+import { Video } from '../_interfaces/video.model';
+import { Book } from '../_interfaces/book.model';
+import { YesNoModalComponent } from '../yes-no-modal/yes-no-modal.component';
+import { itemsRequest } from '../_interfaces/itemsRequest.model';
 
 @Component({
   selector: 'app-cabinet',
@@ -14,103 +17,174 @@ import { ImageToCreate } from '../_interfaces/FileToCreate.model';
 
 export class CabinetComponent {
 
+  @ViewChild('deleteModal') public deleteModal!: YesNoModalComponent;
+
+  baseApiUrl: string = environment.baseApiUrl;
+  mode: string = 'edit';
   user: Account = { 
     userId: null,
     userName: null
   };
-  image: ImageToCreate = {
-    userId: '',
-    title: null,
-    description: null,
-    fileType: ['', ''],
-    filePath: ''
+  images: Image[] = [];
+  videos: Video[] = [];
+  books: Book[] = [];
+  bookEditStatus: boolean[] = [];
+  itemsRequest: itemsRequest = {
+    userId: null,
+    pageSize: 8,
+    page: 1,
   };
-  title: string = '';
-  description: string = '';
-  response = {
-    contentType: ['', ''],
-    dbPath: ''
-  };
-
-  contentType: string = '';
-  progress: number = 0;
-  message: string = '';
+  imagesPageNum: number = 1;
+  videosPageNum: number = 1;
+  booksPageNum: number = 1;
 
   constructor(
     private authService: AuthService, 
     private storageService: StorageService,
-    private router: Router
     ) { }
 
   ngOnInit(): void {
     this.authService.accountConfirm()
     .subscribe({
       next: (response: any) => {
-        console.log(response);
-        if (response.userName)
-        {
+        if (response.userName) {
           this.user.userId = response.userId;
           this.user.userName = response.userName;
+          this.getImages(1);
+          this.getVideos(1);
+          this.getBooks(1);
         }
       },
       error: (response) => {
         console.log(response);
-        this.router.navigate(['login']);
       }
     });
   }
 
-  uploadFile = (files : any) => {
-    if (files.length === 0 || this.user.userId === null) {
-      return;
-    }
-
-    const formData = new FormData();
-
-    var fileToUpload = <File>files[0];
-    formData.append('files.Account', this.user.userId)
-    formData.append('files.File', fileToUpload, fileToUpload.name)
-    
-    this.storageService.uploadFile(formData)
-      .subscribe({
-        next: (event: any) => {
-        this.message = '';
-        if (event.type === HttpEventType.UploadProgress)
-          this.progress = Math.round(100 * event.loaded / event.total);
-        else if (event.type === HttpEventType.Response) {
-          this.message = 'Загрузка завершена';
-          this.response = event.body;
+  getImages(pageNum : number) {
+    this.images = [];
+    this.imagesPageNum = pageNum;
+    this.itemsRequest = {
+      userId: this.user.userId,
+      pageSize: 8,
+      page: pageNum,
+    };
+    this.storageService.getImages(this.itemsRequest)
+    .subscribe({
+      next: (response: any) => {
+        if (response) {
+          for (var i = 0; i < response.length; i++) {
+            if (response[i].userId === this.user.userId) {
+              this.images.push(response[i]);
+            }
+          }
         }
       },
       error: (response) => console.log(response)
     });
-
   }
 
-  onCreate = () => {
-    this.image = {
+  getVideos(pageNum : number) {
+    this.videos = [];
+    this.videosPageNum = pageNum;
+    this.itemsRequest = {
       userId: this.user.userId,
-      title: this.title,
-      description: this.description,
-      filePath: this.response.dbPath,
-      fileType: this.response.contentType
-    }
-    this.message = 'Идёт обработка...';
-    this.storageService.saveFile(this.image)
+      pageSize: 8,
+      page: pageNum,
+    };
+    this.storageService.getVideos(this.itemsRequest)
     .subscribe({
-      next: (response:any) => {
-        console.log(response);
-        this.message = 'Сохранено';
+      next: (response: any) => {
+        if (response) {
+          for (var i = 0; i < response.length; i++) {
+            if (response[i].userId === this.user.userId) {
+              this.videos.push(response[i]);
+            }
+          }
+        }
       },
-      error: (response:any) => console.log(response)
+      error: (response) => console.log(response)
     });
   }
 
-  createImgPath = (serverPath: string) => { 
-    return `https://localhost:7185/${serverPath}`; 
+  getBooks(pageNum : number) {
+    this.books = [];
+    this.booksPageNum = pageNum;
+    this.itemsRequest = {
+      userId: this.user.userId,
+      pageSize: 2,
+      page: pageNum,
+    };
+    this.storageService.getBooks(this.itemsRequest)
+    .subscribe({
+      next: (response: any) => {
+        if (response) {
+          for (var i = 0; i < response.length; i++) {
+            if (response[i].userId === this.user.userId) {
+              this.books.push(response[i]);
+              this.bookEditStatus[response[i].id] = false;
+            }
+          }
+        }
+      },
+      error: (response) => console.log(response)
+    });
+  }
+
+  openEditWindow(id : number) {
+    this.bookEditStatus[id] = !this.bookEditStatus[id];
+  }
+
+  deleteImage(id : number[]) {
+    // const userAnswer = await this.deleteModal.showAsync();
+    // if (userAnswer === 'Yes') {
+    //   console.log('delete');
+    this.storageService.deleteImage(id)
+    .subscribe({
+      next: () => {
+        var index = this.images.findIndex(d => d.id === id);
+        this.images.splice(index, 1);
+      },
+      error: (response:any) => console.log(response)
+    });
+    // }
+  }
+
+  deleteVideo(id : number[]) {
+    // const userAnswer = await this.deleteModal.showAsync();
+    // if (userAnswer === 'Yes') {
+    //   console.log('delete');
+    this.storageService.deleteVideo(id)
+    .subscribe({
+      next: () => {
+        var index = this.videos.findIndex(d => d.id === id);
+        this.videos.splice(index, 1);
+      },
+      error: (response:any) => console.log(response)
+    });
+    // }
+  }
+
+  deleteBook(id : number) {
+    // const userAnswer = await this.deleteModal.showAsync();
+    // if (userAnswer === 'Yes') {
+    //   console.log('delete');
+      this.storageService.deleteBook(id)
+      .subscribe({
+        next: () => {
+          var index = this.books.findIndex(d => d.id === id);
+          this.books.splice(index, 1);
+        },
+        error: (response:any) => console.log(response)
+      });
+    // }
+  }
+
+  createFilePath = (serverPath: string) => { 
+    return `${this.baseApiUrl}/${serverPath}`; 
   }
 
   goToLink(serverPath: string){
-    window.open(`https://localhost:7185/${serverPath}`, "_blank");
+    window.open(`${this.baseApiUrl}/${serverPath}`, "_blank");
   }
 }

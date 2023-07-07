@@ -1,0 +1,120 @@
+<article class="container my-5">
+    <section class="uploadBook">
+        <div class="row">
+            <div class="col-lg-6">
+                 <form #form="ngForm">
+                     <div class="mb-3">
+                        <label for="title">Название</label>
+                        <input type="text" class="form-control" id="title" name="title" 
+                            placeholder="Введите название" [(ngModel)]="title"
+                            #titleV="ngModel" required>
+                        <div *ngIf="titleV.invalid && (titleV.dirty || titleV.touched)" class="alert">
+                            <div *ngIf="titleV.errors?.['required']">
+                                Поле обязательно для заполнения!
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="author">Автор</label>
+                        <input type="text" class="form-control" id="author" name="author" 
+                            placeholder="Фамилия Имя Отчество (если есть)" [(ngModel)]="author"
+                            #authorV="ngModel" required>
+                        <div *ngIf="authorV.invalid && (authorV.dirty || authorV.touched)" class="alert">
+                            <div *ngIf="authorV.errors?.['required']">
+                                Поле обязательно для заполнения!
+                            </div>
+                        </div>
+                     </div>
+                    <div class="mb-3">
+                        <label for="genre"><a style="text-decoration: none" target="_blank" 
+                            href="https://ru.wikipedia.org/wiki/%D0%9B%D0%B8%D1%82%D0%B5%D1%80%D0%B0%D1%82%D1%83%D1%80%D0%BD%D1%8B%D0%B5_%D0%B6%D0%B0%D0%BD%D1%80%D1%8B">
+                            Жанр</a></label>
+                        <input type="text" class="form-control" id="genre" name="genre" 
+                            placeholder="Выбирайте из списка общепринятых" [(ngModel)]="genre"
+                            #genreV="ngModel" required>
+                        <div *ngIf="genreV.invalid && (genreV.dirty || genreV.touched)" class="alert">
+                            <div *ngIf="genreV.errors?.['required']">
+                                Поле обязательно для заполнения!
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="writingDate">Дата написания</label>
+                        <input type="number" class="form-control" id="writingDate" name="writingDate" 
+                            placeholder="Год завершения работы над книгой" [(ngModel)]="writingDate"
+                            #writingDateV="ngModel" required>
+                            <div *ngIf="writingDateV.invalid && (writingDateV.dirty || writingDateV.touched)" class="alert">
+                                <div *ngIf="writingDateV.errors?.['required']">
+                                    Поле обязательно для заполнения!
+                                </div>
+                            </div>
+                    </div>
+                    <div class="row" style="margin-bottom:15px;">
+                        <p>Загрузите файл книги и обложку</p>
+                        <div class="col" id="upload-container" draggable="true" ngClass="{{ dragAreaClass }}">
+                            <input id="file-input" type="file" accept=".txt, .fb2, .png, .jpg, .bmp" #file placeholder="Выбрать файл" 
+                                (change)="uploadBookFile(file.files)">
+                            <label (click)="file.click()">Выбрать файл</label>
+                        </div>
+                        <div class="col">
+                            <mat-progress-bar mode="determinate" value="{{progress}}"></mat-progress-bar>  
+                            <span *ngIf="(progress > 0 && !message)">
+                                {{progress}}%
+                            </span>
+                            <span *ngIf="message">
+                                {{message}}
+                            </span>
+                        </div>
+                        <p>Доступные форматы книги: .txt, .fb2</p>
+                        <p>Доступные форматы обложки: .png, .jpg, .bmp</p>
+                        <p>Советуем загружать файлы не более 100MB</p>
+                    </div>
+                    <div class="mb-3">
+                        <label for="annotation">Аннотация (необязательно)</label>
+                        <input type="text" class="form-control" id="annotation" name="annotation" 
+                            placeholder="Краткое содержание книги" [(ngModel)]="annotation">
+                    </div>
+                    <div class="mb-3">
+                        <label for="publicationDate">Дата публикации (необязательно)</label>
+                        <input type="number" class="form-control" id="publicationDate" name="publicationDate" 
+                            placeholder="Год публикации в издании" [(ngModel)]="publicationDate">
+                    </div>
+                    <div class="mb-3">
+                        <label for="publisher">Издатель (необязательно)</label>
+                        <input type="text" class="form-control" id="publisher" name="publisher" 
+                            placeholder="Название издательства" [(ngModel)]="publisher">
+                    </div>
+                    <div class="mb-3">
+                        <label for="numberOfPages">Количество страниц (необязательно)</label>
+                        <input type="number" class="form-control" id="numberOfPages" name="numberOfPages" 
+                            placeholder="Число страниц в напечатанной книге" [(ngModel)]="numberOfPages">
+                    </div>
+                    <ng-container [ngSwitch]="mode">
+                        <button *ngSwitchCase="'edit'" type="button" 
+                            class="w-100 btn btn-lg btn-primary mb-3" (click)="onEditBook()">Изменить
+                        </button>
+                        <button *ngSwitchCase="'create'" type="button" 
+                            class="w-100 btn btn-lg btn-primary mb-3" (click)="onSaveBook()">Сохранить
+                        </button>
+                      </ng-container>
+              </form>
+          </div>
+
+          <div class="col" *ngIf="response.filePath">
+            <div class="row row-cols-auto gy-3">
+                <div class="col" *ngFor="let filePath of response.filePath; let i = index">
+                    <img *ngIf="response.contentType[i][0] == 'image'" [src]="createFilePath(response.filePath[i])" width="300" height="300">
+                </div>
+            </div>
+          </div>
+          <div class="col">
+              <div class="row row-cols-auto gy-3">
+                  <div class="col">
+                      <img *ngIf="response.filePath[1]" [src]="createFilePath(response.filePath[1])" width="300" height="300">
+                      <p *ngIf="response.filePath[0]">{{response.filePath[0].split('.')[3]}}</p>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </section>
+  </article>

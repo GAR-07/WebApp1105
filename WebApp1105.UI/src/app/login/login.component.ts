@@ -33,7 +33,7 @@ export class LoginComponent {
       }
       localStorage.setItem('isLoggedIn', '+')
       this.appComponent.isLoggedIn = true;
-      this.router.navigate(['cabinet']);
+      this.router.navigate(['']);
     },
       error: (response) => {
         console.log(response);

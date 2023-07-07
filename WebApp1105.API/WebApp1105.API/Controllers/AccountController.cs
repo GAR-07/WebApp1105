@@ -48,7 +48,7 @@ namespace WebApp1105.API.Controllers
                 {
                     if (!BCrypt.Net.BCrypt.EnhancedVerify(model.Password, account.PasswordHash, HashType.SHA512))
                     {
-                        return BadRequest("Password is not valid");
+                        return Unauthorized("Password is not valid");
                     }
                 }
                 else
@@ -111,21 +111,15 @@ namespace WebApp1105.API.Controllers
             }
             catch
             {
-                if (HttpContext.User.Identity.IsAuthenticated)
-                {
-                    var response = new { 
-                        userId = _dbContext.Accounts.FirstOrDefault(p => p.UserName == HttpContext.User.Identity.Name).UserId,
-                        userName = HttpContext.User.Identity.Name
-                    };
-                    return Ok(response);
-                }
-                else
-                    return Unauthorized();
+                var response = new { 
+                    userId = _dbContext.Accounts.FirstOrDefault(p => p.UserName == HttpContext.User.Identity.Name).UserId,
+                    userName = HttpContext.User.Identity.Name
+                };
+                return Ok(response);
             }
         }
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = AuthSchemes)]
         [Route("Logout")]
         public async Task<IActionResult> Logout()
         {

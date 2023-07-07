@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from './_services/auth.service';
 import { Router } from '@angular/router';
-import { HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -18,38 +17,27 @@ constructor(
 ) {}
 
   ngOnInit(): void {
-    if (localStorage.getItem('isLoggedIn') == '+')
-    {
-      // const accessToken = localStorage.getItem('accessToken');
-      // if (accessToken)
-      //   var headers = new HttpHeaders().set('Authorization', 'Bearer ' + accessToken);
-      // else
-      //   var headers = new HttpHeaders().set('Access-Control-Allow-Credentials', 'true');
-
-      // this.authService.cabinet(headers)
-      // .subscribe({
-      //   next: (response: any) => {
-      //     const userName = response.userName;
-      //     if (userName)
-            this.isLoggedIn = true
-      //     else
-      //       this.isLoggedIn = false
-      //   },
-      //   error: (response) => {
-      //     console.log(response);
-      //     this.router.navigate(['login']);
-      //   }
-      // });
-    }
+    this.authService.accountConfirm()
+    .subscribe({
+      next: (response: any) => {
+        console.log(response);
+        if (response.userName)
+        {
+          this.isLoggedIn = true
+        }
+      },
+      error: (response) => {
+        console.log(response);
+      }
+    });
   }
 
   logout(): void {
     this.isLoggedIn = false;
       this.authService.logout().subscribe({
       next: response => {
-        // console.log(res);
-        localStorage.clear();
-        sessionStorage.clear();
+        // console.log(response);
+        localStorage.removeItem('isLoggedIn');
         this.router.navigate(['login']);
       },
       error: response => console.log(response)

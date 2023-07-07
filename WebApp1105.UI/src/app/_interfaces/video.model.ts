@@ -1,4 +1,5 @@
 export interface Video {
+    id: [number, ...number[]],
     userId: string,
     videoName: string,
     videoPath: [string, ...string[]] ,

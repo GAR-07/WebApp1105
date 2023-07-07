@@ -1,0 +1,60 @@
+<article class="container my-5">
+    <section class="uploadFile">
+      <div class="row">
+          <div class="col-lg-6">
+              <form #form="ngForm">
+                  <div class="mb-3">
+                      <label for="title">Название</label>
+                      <input type="text" class="form-control" id="title" name="title" 
+                          placeholder="Введите название" [(ngModel)]="title">
+                  </div>
+                  <div class="mb-3">
+                      <label for="description">Описание</label>
+                      <input type="text" class="form-control" id="description" name="description" 
+                          placeholder="Введите описание" [(ngModel)]="description">
+                  </div>
+                  <div class="row" style="margin-bottom:15px;">
+                      <p>Советуем загружать файлы не более 100MB <br> Доступные форматы: .png, .jpg, .bmp, .mp4</p>
+                      <div class="col" id="upload-container" draggable="true" ngClass="{{ dragAreaClass }}">
+                          <input id="file-input" type="file" accept=".png, .jpg, .bmp, .mp4" #file placeholder="Выбрать файл" 
+                              (change)="uploadFile(file.files)" multiple>
+                          <label (click)="file.click()">Выбрать файл</label>
+                      </div>
+                      <div class="col">
+                        <mat-progress-bar mode="determinate" value="{{progress}}"></mat-progress-bar>  
+                        <span *ngIf="(progress > 0 && !message)">
+                            {{progress}}%
+                        </span>
+                        <span *ngIf="message">
+                            {{message}}
+                        </span>
+                      </div>
+                  </div>
+                  <ng-container [ngSwitch]="mode">
+                    <button *ngSwitchCase="'edit'" type="button" 
+                        class="w-100 btn btn-lg btn-primary mb-3" (click)="onSaveFile()">Изменить
+                    </button>
+                    <button *ngSwitchCase="'create'" type="button" 
+                        class="w-100 btn btn-lg btn-primary mb-3" (click)="onSaveFile()">Сохранить
+                    </button>
+                  </ng-container>
+              </form>
+              <p>Загруженные фото и видео файлы будут преобразованы в разрешения 100х100, 300х300 и 900х900.<br>
+                  Учитывайте это при загрузке изображений и видео для избежания растягивания и потери качества!</p>
+          </div>
+  
+          <div class="col" *ngIf="response.filePath">
+              <div class="row row-cols-auto gy-3">
+                  <div class="col" *ngFor="let filePath of response.filePath; let i = index">
+                      <img *ngIf="response.contentType[i][0] == 'image'" [src]="createFilePath(response.filePath[i])" width="300" height="300">
+                      <video *ngIf="response.contentType[i][0] == 'video'" width="300" height="300" controls="controls">
+                          <source [src]="createFilePath(response.filePath[i])" type='video/ogg; codecs="theora, vorbis"'>
+                          <source [src]="createFilePath(response.filePath[i])" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+                          <source [src]="createFilePath(response.filePath[i])" type='video/webm; codecs="vp8, vorbis"'>
+                      </video>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </section>
+  </article>

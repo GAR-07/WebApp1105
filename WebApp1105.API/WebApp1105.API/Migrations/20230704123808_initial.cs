@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WebApp1105.API.Migrations
 {
     /// <inheritdoc />
-    public partial class DbContext : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -65,6 +65,31 @@ namespace WebApp1105.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Books",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Genre = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Author = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Annotation = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BookFilePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BookFileData = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    WritingDate = table.Column<int>(type: "int", nullable: false),
+                    PublicationDate = table.Column<int>(type: "int", nullable: true),
+                    CoverPath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CoverData = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    NumberOfPages = table.Column<int>(type: "int", nullable: true),
+                    Publisher = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Books", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Images",
                 columns: table => new
                 {
@@ -82,6 +107,26 @@ namespace WebApp1105.API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Images", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Videos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    VideoName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    VideoPath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    VideoData = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    VideoWidth = table.Column<int>(type: "int", nullable: false),
+                    VideoHeight = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Videos", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -252,7 +297,13 @@ namespace WebApp1105.API.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Books");
+
+            migrationBuilder.DropTable(
                 name: "Images");
+
+            migrationBuilder.DropTable(
+                name: "Videos");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

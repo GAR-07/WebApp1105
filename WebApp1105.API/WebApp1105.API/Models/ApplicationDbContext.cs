@@ -12,5 +12,6 @@ namespace WebApp1105.Models
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<Video> Videos { get; set; }
+        public DbSet<Book> Books { get; set; }
     }
 }

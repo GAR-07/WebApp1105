@@ -7,20 +7,38 @@
                 <div class="mb-3">
                     <label for="UserName" class="form-label">Логин</label>
                     <input type="text" id="UserName" class="form-control"
-                    name ="UserName" [(ngModel)]="accountLoginRequest.userName" />
+                    name ="UserName" [(ngModel)]="accountLoginRequest.userName"                            
+                    #userName="ngModel" required minlength="3">
+                    <div *ngIf="userName.invalid && (userName.dirty || userName.touched)" class="alert">
+                        <div *ngIf="userName.errors?.['required']">
+                            Поле обязательно для заполнения!
+                        </div>
+                        <div *ngIf="userName.errors?.['minlength']">
+                            Имя пользователя должно содержать не менее 3 символов!
+                        </div>
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="Password" class="form-label">Пароль</label>
                     <input type="text" id="Password" class="form-control"
-                    name ="Password" [(ngModel)]="accountLoginRequest.password" />
+                    name ="Password" [(ngModel)]="accountLoginRequest.password"
+                    #password="ngModel" required minlength="4">
+                    <div *ngIf="password.invalid && (password.dirty || password.touched)" class="alert">
+                        <div *ngIf="password.errors?.['required']">
+                            Поле обязательно для заполнения!
+                        </div>
+                        <div *ngIf="password.errors?.['minlength']">
+                            Пароль должен содержать не менее 4 символов!
+                        </div>
+                    </div>
                 </div>
                 <div>
                     <p >Выберите тип аутентификации:</p>
-                    <input class="mb-3" for="TypeAuth" id="TypeAuth" type="radio" value="Cookie"
-                    name ="TypeAuth" [(ngModel)]="accountLoginRequest.typeAuth" />
+                    <input class="mb-3" type="radio" value="Cookie"
+                    name ="TypeAuth" [(ngModel)]="accountLoginRequest.typeAuth">
                     <span> Cookie </span> <br />
-                    <input class="mb-3" for="TypeAuth" type="radio" id="TypeAuth" value="Bearer"
-                    name ="TypeAuth" [(ngModel)]="accountLoginRequest.typeAuth" />
+                    <input class="mb-3" type="radio" value="Bearer"
+                    name ="TypeAuth" [(ngModel)]="accountLoginRequest.typeAuth">
                     <span> Bearer </span>
                 </div>
                 <div>

@@ -2,6 +2,7 @@
 {
     public class VideoViewModel
     {
+        public int[] id { get; set; }
         public string userId { get; set; }
         public string videoName { get; set; }
         public string[] videoPath { get; set; }

@@ -1,4 +1,5 @@
 export interface Image {
+    id: [number, ...number[]],
     userId: string,
     imgName: string,
     imgPath: [string, ...string[]] ,

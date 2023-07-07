@@ -1,51 +1,129 @@
 <div class="d-flex justify-content-center p-2 bg-light">
   <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
     <li class="nav-item" role="presentation">
-      <button class="nav-link active" id="pills-images-tab" data-bs-toggle="pill" data-bs-target="#pills-images" type="button" role="tab" aria-controls="pills-images" aria-selected="true">images</button>
+      <button class="nav-link active" id="pills-images-tab" data-bs-toggle="pill" data-bs-target="#pills-images" 
+      type="button" role="tab" aria-controls="pills-images" aria-selected="true">images</button>
     </li>
     <li class="nav-item" role="presentation">
-      <button class="nav-link" id="pills-videos-tab" data-bs-toggle="pill" data-bs-target="#pills-videos" type="button" role="tab" aria-controls="pills-videos" aria-selected="false">videos</button>
+      <button class="nav-link" id="pills-videos-tab" data-bs-toggle="pill" data-bs-target="#pills-videos" 
+      type="button" role="tab" aria-controls="pills-videos" aria-selected="false">videos</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="pills-books-tab" data-bs-toggle="pill" data-bs-target="#pills-books" 
+      type="button" role="tab" aria-controls="pills-videos" aria-selected="false">books</button>
     </li>
   </ul>
 </div>
 
-    <div class="tab-content" id="pills-tabContent">
-      <div class="tab-pane fade show active" id="pills-images" role="tabpanel" aria-labelledby="pills-images-tab" tabindex="0">
-        <article class="container-fluid my-3">
-          <div class="row row-cols-auto gy-3">
-            <div class="col" *ngFor="let image of images; let i = index">
-              <!-- <H1> {{images[i].title}} </H1> -->
-              <img  [src]="createFilePath(images[i].imgPath[1])" alt="Загруженное изображение">
-              <!-- <p> {{images[i].description}} </p> -->
-              <p> Открыть в другом разрешении: </p>
-              <a (click)="goToLink(images[i].imgPath[0])">{{images[i].imgWidth[0]}}x{{images[i].imgHeight[0]}}</a><br>
-              <a (click)="goToLink(images[i].imgPath[1])">{{images[i].imgWidth[1]}}x{{images[i].imgHeight[1]}}</a><br>
-              <a (click)="goToLink(images[i].imgPath[2])">{{images[i].imgWidth[2]}}x{{images[i].imgHeight[2]}}</a><br>
-            </div>
+<div class="tab-content" id="pills-tabContent">
+  <div class="tab-pane fade show active" id="pills-images" role="tabpanel" aria-labelledby="pills-images-tab" tabindex="0">
+    <article class="container-fluid my-3">
+      <div class="row row-cols-auto gy-3">
+        <div class="col" *ngFor="let image of images; let i = index">
+          <!-- <H1> {{images[i].title}} </H1> -->
+          <!-- <p> {{images[i].description}} </p> -->
+          <div class="dropdown d-grid justify-content-end">
+            <a class="dropdown-toggle me" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"></a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <li>
+                <a class="dropdown-item" *ngFor="let image of images[i].imgPath; let j = index"
+                (click)="goToLink(images[i].imgPath[j])">Открыть {{images[i].imgWidth[j]}}x{{images[i].imgHeight[j]}}</a>
+              </li>
+            </ul>
           </div>
-        </article>
+          <img  [src]="createFilePath(images[i].imgPath[1])" alt="Загруженное изображение">
+        </div>
       </div>
-      
-      <div class="tab-pane fade" id="pills-videos" role="tabpanel" aria-labelledby="pills-videos-tab" tabindex="0">
-        <article class="container-fluid my-3">
-          <div class="row row-cols-auto gy-3">
-            <div class="col" *ngFor="let video of videos; let i = index">
-              <!-- <H1> {{videos[i].title}} </H1> -->
-              <video width="300" height="300" controls="controls">
-                <source [src]="createFilePath(videos[i].videoPath[1])" type='video/ogg; codecs="theora, vorbis"'>
-                <source [src]="createFilePath(videos[i].videoPath[1])" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
-                <source [src]="createFilePath(videos[i].videoPath[1])" type='video/webm; codecs="vp8, vorbis"'>
-                Тег video не поддерживается вашим браузером. 
-                <a (click)="goToLink(videos[i].videoPath[1])">Скачайте видео</a>.
-              </video>
-              <!-- <p> {{videos[i].description}} </p> -->
-              <p> Открыть в другом разрешении: </p>
-              <a (click)="goToLink(videos[i].videoPath[0])">{{videos[i].videoWidth[0]}}x{{videos[i].videoHeight[0]}}</a><br>
-              <a (click)="goToLink(videos[i].videoPath[1])">{{videos[i].videoWidth[1]}}x{{videos[i].videoHeight[1]}}</a><br>
-              <a (click)="goToLink(videos[i].videoPath[2])">{{videos[i].videoWidth[2]}}x{{videos[i].videoHeight[2]}}</a><br>
-            </div>
+      <nav class="my-3" aria-label="Images page navigation">
+        <ul class="pagination justify-content-center">
+            <li *ngIf="imagesPageNum != 1" class="page-item"><a class="page-link" (click)="getImages(1)">В начало</a></li>
+            <li *ngIf="imagesPageNum != 1" class="page-item"><a class="page-link" (click)="getImages(imagesPageNum - 1)">Назад</a></li>
+            <li *ngIf="imagesPageNum != 1" class="page-item"><a class="page-link" (click)="getImages(imagesPageNum - 1)">{{imagesPageNum - 1}}</a></li>
+            <li class="page-item active"><a class="page-link" (click)="getImages(imagesPageNum)">{{imagesPageNum}}</a></li>
+            <li *ngIf="images[7]" class="page-item"><a class="page-link" (click)="getImages(imagesPageNum + 1)">{{imagesPageNum + 1}}</a></li>
+            <li *ngIf="images[7]" class="page-item"><a class="page-link" (click)="getImages(imagesPageNum + 1)">Вперёд</a></li>
+        </ul>
+      </nav>
+    </article>
+  </div>
+  
+  <div class="tab-pane fade" id="pills-videos" role="tabpanel" aria-labelledby="pills-videos-tab" tabindex="0">
+    <article class="container-fluid my-3">
+      <div class="row row-cols-auto gy-3">
+        <div class="col" *ngFor="let video of videos; let i = index">
+          <!-- <H1> {{videos[i].title}} </H1> -->
+          <!-- <p> {{videos[i].description}} </p> -->
+          <div class="dropdown d-grid justify-content-end">
+            <a class="dropdown-toggle me" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"></a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <li>
+                <a class="dropdown-item" *ngFor="let videoPath of videos[i].videoPath; let j = index" 
+                (click)="goToLink(videos[i].videoPath[j])">{{videos[i].videoWidth[j]}}x{{videos[i].videoHeight[j]}}</a>
+              </li>
+            </ul>
           </div>
-        </article>
+          <video width="300" height="300" controls="controls">
+            <source [src]="createFilePath(videos[i].videoPath[1])" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+            <source [src]="createFilePath(videos[i].videoPath[1])" type='video/ogg; codecs="theora, vorbis"'>
+            <source [src]="createFilePath(videos[i].videoPath[1])" type='video/webm; codecs="vp8, vorbis"'>
+          </video>
+        </div>
       </div>
-    </div>
+      <nav class="my-3" aria-label="Videos page navigation">
+        <ul class="pagination justify-content-center">
+            <li *ngIf="videosPageNum != 1" class="page-item"><a class="page-link" (click)="getVideos(1)">В начало</a></li>
+            <li *ngIf="videosPageNum != 1" class="page-item"><a class="page-link" (click)="getVideos(videosPageNum - 1)">Назад</a></li>
+            <li *ngIf="videosPageNum != 1" class="page-item"><a class="page-link" (click)="getVideos(videosPageNum - 1)">{{videosPageNum - 1}}</a></li>
+            <li class="page-item active"><a class="page-link" (click)="getVideos(videosPageNum)">{{videosPageNum}}</a></li>
+            <li *ngIf="videos[7]" class="page-item"><a class="page-link" (click)="getVideos(videosPageNum + 1)">{{videosPageNum + 1}}</a></li>
+            <li *ngIf="videos[7]" class="page-item"><a class="page-link" (click)="getVideos(videosPageNum + 1)">Вперёд</a></li>
+        </ul>
+      </nav>
+    </article>
+  </div>
 
+  <div class="tab-pane fade" id="pills-books" role="tabpanel" aria-labelledby="pills-books-tab" tabindex="0">
+    <article class="container-fluid my-3">
+      <div *ngFor="let book of books; let i = index">
+        <div class="row row-cols-2 gy-4">
+          <div class="col">
+            <img  [src]="createFilePath(books[i].coverPath)" alt="Загруженное изображение">
+          </div>
+          <div class="col">
+            <div class="dropdown d-grid justify-content-end">
+                <a class="dropdown-toggle me" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"></a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  <li>
+                    <a class="dropdown-item" href="{{createFilePath(books[i].bookFilePath)}}" download>Скачать</a>
+                  </li>
+                </ul>
+              </div>
+              <H1> {{books[i].title}} </H1> <br>
+            <div class="row row-cols-2 gy-3">
+              <div class="col">
+                <p>Жанр: {{books[i].genre}} </p><br>
+                <p>Автор: {{books[i].author}} </p><br>
+                <p>Дата написания: {{books[i].writingDate}} </p>
+              </div>
+              <div class="col">
+                <p>Издательство: {{books[i].publisher}} </p><br>
+                <p>Дата публикации {{books[i].publicationDate}} </p><br>
+                <p>Количество страниц: {{books[i].numberOfPages}} </p><br>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <nav class="my-3" aria-label="Books page navigation">
+        <ul class="pagination justify-content-center">
+            <li *ngIf="booksPageNum != 1" class="page-item"><a class="page-link" (click)="getBooks(1)">В начало</a></li>
+            <li *ngIf="booksPageNum != 1" class="page-item"><a class="page-link" (click)="getBooks(booksPageNum - 1)">Назад</a></li>
+            <li *ngIf="booksPageNum != 1" class="page-item"><a class="page-link" (click)="getBooks(booksPageNum - 1)">{{booksPageNum - 1}}</a></li>
+            <li class="page-item active"><a class="page-link" (click)="getBooks(booksPageNum)">{{booksPageNum}}</a></li>
+            <li *ngIf="books[1]" class="page-item"><a class="page-link" (click)="getBooks(booksPageNum + 1)">{{booksPageNum + 1}}</a></li>
+            <li *ngIf="books[1]" class="page-item"><a class="page-link" (click)="getBooks(booksPageNum + 1)">Вперёд</a></li>
+        </ul>
+      </nav>
+    </article>
+  </div>
+</div>
