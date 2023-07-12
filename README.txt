@@ -3,20 +3,22 @@ Web приложение, позволяющее осуществлять вхо
 
 Требуется установить:
 Visual Studio 2022 (https://visualstudio.microsoft.com/)
-Node.js 18.16.0 (x64) (https://nodejs.org/)
+Node.js 18.16.0 (https://nodejs.org/)
 Приложение ffmpeg.exe (https://ffmpeg.org/)
 Использовался MS SQL Server v19, но должен подойти и другой SQL сервер.
 
 Произвести настройку путей до базы данных в appsettings.json (в StorageController для ffmpeg).
-Загруженные файлы хранятся в Resources папке API части проекта.
+Загруженные файлы хранятся в папке Resources API части проекта.
 
 API часть проекта открывается через Visual Studio и запускается.
-Все взаимодействия происходят через UI, запускается через консоль командами, находясь по адрессу папки WebApp1105.UI:
-npm i
-ng serve --o
+Все взаимодействия происходят через UI, запускается через консоль командой "ng serve --o", находясь по адресу папки WebApp1105.UI:
 
-Используются:
+
+Технологии:
 ASP.NET 6
+MS SQL Server 19
+ffmpeg-gpl 6.0
+Node.js 18.16.0
 Angular 16.0.2
 jquery 3.7.0
 bootstrap 5.3.0-alpha1.bundle
